@@ -29,6 +29,7 @@ class DashboardController extends Controller
             'auth' => [
                 'user' => auth()->user(),
             ],
+            'csrfToken' => csrf_token(),
         ]);
     }
 }

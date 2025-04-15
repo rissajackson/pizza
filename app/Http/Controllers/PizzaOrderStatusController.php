@@ -18,16 +18,6 @@ class PizzaOrderStatusController extends Controller
      */
     public function update(Request $request, PizzaOrder $pizzaOrder): JsonResponse
     {
-        $authHeader = $request->header('Authorization');
-        $apiToken = str_replace('Bearer ', '', $authHeader);
-
-        if (empty($authHeader) || $apiToken !== env('API_TOKEN')) {
-            return response()->json([
-                'error' =>
-                'Unauthorized: Invalid or missing API token. Please provide a valid API token in the Authorization header.',
-            ], status: 401);
-        }
-
         // Validate the incoming data
         $validated = $request->validate([
             'status' => ['required', 'string', function (string $attribute, string $value, callable $fail) {

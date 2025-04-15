@@ -86,39 +86,50 @@ async function updateOrderStatus(orderId, newStatus) {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <!-- Orders List -->
-                <div v-if="reactiveOrders.length" class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <ul>
-                            <li v-for="order in reactiveOrders" :key="order.id">
-                                <div class="flex items-center justify-between">
-                                    <!-- Order Info -->
-                                    <span>Order #{{ order.id }}</span> - Status: {{ order.status }}
-
-                                    <!-- Action Buttons -->
-                                    <PrimaryButton
-                                        @click="updateOrderStatus(order.id, 'working')"
-                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Start
-                                    </PrimaryButton>
-                                    <PrimaryButton
-                                        @click="updateOrderStatus(order.id, 'in_oven')"
-                                        class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Oven
-                                    </PrimaryButton>
-                                    <PrimaryButton
-                                        @click="updateOrderStatus(order.id, 'ready')"
-                                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Ready
-                                    </PrimaryButton>
-                                </div>
-                            </li>
-                        </ul>
-                        <div v-if="reactiveOrders.length === 0" class="text-gray-500">
-                            No orders available.
+                        <div>
+                            <h3 class="text-lg font-medium mb-4 text-gray-700">Orders</h3>
+                            <ul class="list-disc pl-6">
+                                <li v-for="order in reactiveOrders" :key="order.id" class="mb-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="font-semibold text-gray-800">Order #{{ order.id }}</span> –
+                                            <span :class="[
+                                                order.status === 'pending' ? 'italic text-gray-500' :
+                                                order.status === 'working' ? 'italic text-blue-500' :
+                                                order.status === 'in_oven' ? 'italic text-orange-500' :
+                                                'italic text-green-500'
+                                            ]">
+                                                {{ order.status }}
+                                            </span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <PrimaryButton
+                                                @click="updateOrderStatus(order.id, 'working')"
+                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                Start
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                @click="updateOrderStatus(order.id, 'in_oven')"
+                                                class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                Oven
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                @click="updateOrderStatus(order.id, 'ready')"
+                                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                Ready
+                                            </PrimaryButton>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div v-if="reactiveOrders.length === 0" class="text-gray-500">
+                                No orders available.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -128,8 +139,7 @@ async function updateOrderStatus(orderId, newStatus) {
 </template>
 
 <style scoped>
-    h3 {
-        color: #2c3e50;
-    }
+h3 {
+    color: #2c3e50;
+}
 </style>
-
