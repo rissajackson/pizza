@@ -119,23 +119,23 @@ async function updateOrderStatus(orderId, newStatus) {
                                         <div>
                                             <span class="font-semibold">Order #{{ order.id }}</span> –
                                             Status: <span :class="[
-                                                order.status === 'pending' ? 'italic text-gray-500' :
-                                                order.status === 'preparing' ? 'italic text-blue-500' :
+                                                order.status === 'received' ? 'italic text-gray-500' :
+                                                order.status === 'working' ? 'italic text-blue-500' :
                                                 order.status === 'in_oven' ? 'italic text-orange-500' :
                                                 'italic text-green-500'
                                             ]">{{ order.status }}</span>
                                         </div>
                                         <div class="flex gap-2">
                                             <Primary-Button
-                                                @click="updateOrderStatus(order.id, 'preparing')"
-                                                :disabled="order.status !== 'pending'"
+                                                @click="updateOrderStatus(order.id, 'working')"
+                                                :disabled="order.status !== 'received'"
                                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                             >
                                                 Start
                                             </Primary-Button>
                                             <Primary-Button
                                                 @click="updateOrderStatus(order.id, 'in_oven')"
-                                                :disabled="order.status !== 'preparing'"
+                                                :disabled="order.status !== 'working'"
                                                 class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
                                             >
                                                 Oven
