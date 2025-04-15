@@ -8,7 +8,7 @@ import Echo from 'laravel-echo'; // Assuming Echo is globally set up
  * Props provided by the server
  * - Orders are passed as props from the server.
  */
-defineProps({
+const { orders } = defineProps({
     orders: {
         type: Array,
         default: () => [],
@@ -25,7 +25,7 @@ const reactiveOrders = reactive([...orders]);
  * @param {number} orderId - The ID of the pizza order to subscribe to
  */
 function subscribeToOrderUpdates(orderId) {
-    Echo.channel(`pizza-order.${orderId}`)
+    window.Echo.channel(`pizza-order.${orderId}`)
         .listen('PizzaOrderStatusUpdated', (event) => {
             console.log(`Broadcast received for Order #${orderId}:`, event);
 
@@ -57,7 +57,7 @@ onMounted(() => {
  */
 onBeforeUnmount(() => {
     reactiveOrders.forEach((order) => {
-        Echo.leave(`pizza-order.${order.id}`);
+        window.Echo.leave(`pizza-order.${order.id}`);
     });
 });
 </script>

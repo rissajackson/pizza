@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PizzaOrderStatusUpdated implements ShouldBroadcast
+class PizzaOrderStatusUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -28,9 +28,9 @@ class PizzaOrderStatusUpdated implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      */
-    public function broadcastOn(): PrivateChannel
+    public function broadcastOn(): Channel
     {
-        return new PrivateChannel('pizza-order.' . $this->pizzaOrder->id);
+        return new Channel('pizza-order.' . $this->pizzaOrder->id);
     }
 
     /**
