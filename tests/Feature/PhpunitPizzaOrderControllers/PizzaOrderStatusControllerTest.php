@@ -1,12 +1,13 @@
 <?php
 
+namespace Tests\Feature\PhpunitPizzaOrderControllers;
+
 use App\Enums\PizzaOrderStatus;
 use App\Models\PizzaOrder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Carbon\Carbon;
+use Tests\TestCase;
 
 class PizzaOrderStatusControllerTest extends TestCase
 {
@@ -44,8 +45,7 @@ class PizzaOrderStatusControllerTest extends TestCase
 
         // Assert:
         $response->assertOk()
-            ->assertJson(fn (AssertableJson $json) =>
-            $json->where('message', 'Status updated successfully!')
+            ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Status updated successfully!')
                 ->where('pizzaOrder.id', $pizzaOrder->id)
                 ->where('pizzaOrder.status', $newStatus->value)
             );
