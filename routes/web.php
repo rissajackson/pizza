@@ -1,10 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PizzaOrderController;
 use App\Http\Controllers\PizzaOrderStatusController;
+use App\Http\Controllers\PizzaOrderTrackingController;
 use App\Http\Controllers\ProfileController;
-use App\Models\PizzaOrder;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,10 +25,13 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::resource('pizza-orders', PizzaOrderController::class)->only(['index', 'show']);
-
 Route::patch('pizza-orders/{pizzaOrder}/status', [PizzaOrderStatusController::class, 'update'])->name('pizza-order-status.update');
 
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::get('/pizza-orders', [PizzaOrderTrackingController::class, 'index'])
+        ->name('pizza-orders.index');
+});

@@ -6,26 +6,24 @@ use App\Models\PizzaOrder;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class DashboardController extends Controller
+class PizzaOrderTrackingController extends Controller
 {
     /**
-     * Show the dashboard with pizza orders.
+     * Display the dashboard with pizza orders.
      *
      * @return Response
      */
-    public function dashboard(): Response
+    public function index(): Response
     {
-        // Fetch pizza orders and map them to a cleaner structure
         $orders = PizzaOrder::all()->map(function ($order) {
             return [
                 'id' => $order->id,
-                'status' => $order->status->label() // Assuming the label() gives a user-friendly name
+                'status' => $order->status->label() // Assuming status->label formats user-friendly labels
             ];
         });
 
-        // Pass data to the Inertia view
-        return Inertia::render('Dashboard', [
-            'orders' => $orders ?? [],
+        return Inertia::render('PizzaOrderDashboard', [
+            'orders' => $orders,
             'auth' => [
                 'user' => auth()->user(),
             ],
