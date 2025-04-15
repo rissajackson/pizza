@@ -22,7 +22,6 @@ class DashboardController extends Controller
                 'status' => $order->status->label() // Assuming the label() gives a user-friendly name
             ];
         });
-//        dd($orders);
 
         // Pass data to the Inertia view
         return Inertia::render('Dashboard', [

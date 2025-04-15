@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, onMounted, onBeforeUnmount } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import Echo from 'laravel-echo'; // Assuming Echo is globally set up
+import { Head, usePage } from '@inertiajs/vue3'; // Import usePage
+import PrimaryButton from "@/Components/PrimaryButton.vue"; // Import the Button component
 
 /**
  * Props provided by the server
@@ -60,13 +60,46 @@ onBeforeUnmount(() => {
         window.Echo.leave(`pizza-order.${order.id}`);
     });
 });
+
+/**
+ * Function to handle status updates.
+ * This function will send a request to the server to update the order status.
+ */
+async function updateOrderStatus(orderId, newStatus) {
+    try {
+        // Send a request to the server to update the order status
+        const response = await fetch(`/pizza-orders/${orderId}/status`, { // Use fetch
+            method: 'PATCH', // Use PATCH for updates
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': usePage().props.csrfToken, // Get CSRF token from props
+            },
+            body: JSON.stringify({ status: newStatus }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update order status: ${response.status}`);
+        }
+
+        // Optionally, update the local state optimistically.  The WebSocket update
+        // should still be the source of truth, but this makes the UI feel faster.
+        const orderToUpdate = reactiveOrders.find((order) => order.id === orderId);
+        if (orderToUpdate) {
+            orderToUpdate.status = newStatus;
+        }
+
+        console.log(`Order ${orderId} status updated to ${newStatus}`);
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        // Handle the error (e.g., show a message to the user)
+        alert('Failed to update order status. Please try again.');
+    }
+}
 </script>
 
 <template>
-    <!-- Set the page title -->
     <Head title="Dashboard" />
 
-    <!-- Authenticated Laravel Layout -->
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
@@ -74,32 +107,54 @@ onBeforeUnmount(() => {
             </h2>
         </template>
 
-        <!-- Main Dashboard Content -->
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-
-                        <!-- Display Orders -->
                         <div>
                             <h3 class="text-lg font-medium mb-4">Orders</h3>
                             <ul class="list-disc pl-6">
-                                <li
-                                    v-for="order in reactiveOrders"
-                                    :key="order.id"
-                                    class="mb-2"
-                                >
-                                    <span class="font-semibold">Order #{{ order.id }}</span> –
-                                    Status: <span class="italic">{{ order.status }}</span>
+                                <li v-for="order in reactiveOrders" :key="order.id" class="mb-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="font-semibold">Order #{{ order.id }}</span> –
+                                            Status: <span :class="[
+                                                order.status === 'pending' ? 'italic text-gray-500' :
+                                                order.status === 'preparing' ? 'italic text-blue-500' :
+                                                order.status === 'in_oven' ? 'italic text-orange-500' :
+                                                'italic text-green-500'
+                                            ]">{{ order.status }}</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <Primary-Button
+                                                @click="updateOrderStatus(order.id, 'preparing')"
+                                                :disabled="order.status !== 'pending'"
+                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                Start
+                                            </Primary-Button>
+                                            <Primary-Button
+                                                @click="updateOrderStatus(order.id, 'in_oven')"
+                                                :disabled="order.status !== 'preparing'"
+                                                class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                Oven
+                                            </Primary-Button>
+                                            <Primary-Button
+                                                @click="updateOrderStatus(order.id, 'ready')"
+                                                :disabled="order.status !== 'in_oven'"
+                                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                            >
+                                                Ready
+                                            </Primary-Button>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
-
-                            <!-- Display Message if No Orders Exist -->
                             <div v-if="reactiveOrders.length === 0" class="text-gray-500">
                                 No orders available.
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
