@@ -28,14 +28,14 @@ class PizzaOrderStatusController extends Controller
         ]);
 
         // Step 3: Prevent duplicate status updates
-        if ($pizzaOrder->status === $validated['status']) {
+        if ($pizzaOrder->status->value === $validated['status']) { // Compare `value` of enum
             return response()->json([
                 'message' => 'The status is already set to the requested value.',
             ], 200);
         }
 
-        // Update the status using the enum
-        $pizzaOrder->status = PizzaOrderStatus::from($validated['status']); // Enforced type safety
+        // Update the status using the validated string value
+        $pizzaOrder->status = $validated['status']; // Ensure raw string is passed for DB save
         $pizzaOrder->status_updated_at = now(); // Explicitly update the timestamp
         $pizzaOrder->save();
 
@@ -45,4 +45,3 @@ class PizzaOrderStatusController extends Controller
         ]);
     }
 }
-
