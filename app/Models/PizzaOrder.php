@@ -59,12 +59,4 @@ class PizzaOrder extends Model
             }
         });
     }
-
-    /**
-     * Scope queries by status.
-     */
-    public function scopeByStatus($query, PizzaOrderStatus $status)
-    {
-        return $query->where('status', $status->value);
-    }
 }
