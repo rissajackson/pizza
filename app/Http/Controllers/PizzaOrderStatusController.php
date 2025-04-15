@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PizzaOrderStatus;
-use App\Events\PizzaOrderStatusUpdated;
 use App\Models\PizzaOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class PizzaOrderStatusController extends Controller
 {
@@ -32,7 +30,6 @@ class PizzaOrderStatusController extends Controller
 
         // Validate the incoming data
         $validated = $request->validate([
-//            'pizza_id' =>'required|integer', look at something like this later
             'status' => ['required', 'string', function (string $attribute, string $value, callable $fail) {
                 if (!in_array($value, PizzaOrderStatus::values(), true)) {
                     $fail("The selected {$attribute} is invalid.");
@@ -52,11 +49,10 @@ class PizzaOrderStatusController extends Controller
         $pizzaOrder->status_updated_at = now(); // Explicitly update the timestamp
         $pizzaOrder->save();
 
-        event(new PizzaOrderStatusUpdated($pizzaOrder));
-
         return response()->json([
             'message' => 'Status updated successfully!',
             'pizzaOrder' => $pizzaOrder,
         ]);
     }
 }
+
