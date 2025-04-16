@@ -3,12 +3,20 @@
 use App\Enums\PizzaOrderStatus;
 use App\Models\PizzaOrder;
 
-it('updates the status of an order successfully', function () {
-    $pizzaOrder = PizzaOrder::factory()->create([
-        'status' => PizzaOrderStatus::WORKING->value,
-    ]);
+function createPizzaOrderWithStatus(string $status = PizzaOrderStatus::WORKING->value): PizzaOrder
+{
+    return PizzaOrder::factory()->create(['status' => $status]);
+}
 
-    $response = $this->patchJson(route('pizza-order-status.update', $pizzaOrder), [
+function updatePizzaOrderRoute(PizzaOrder|int $pizzaOrder, array $data = []): \Illuminate\Testing\TestResponse
+{
+    return test()->patchJson(route('pizza-order-status.update', $pizzaOrder), $data);
+}
+
+it('updates the status of an order successfully', function () {
+    $pizzaOrder = createPizzaOrderWithStatus();
+
+    $response = updatePizzaOrderRoute($pizzaOrder, [
         'status' => PizzaOrderStatus::IN_OVEN->value,
     ]);
 
@@ -23,33 +31,31 @@ it('updates the status of an order successfully', function () {
 
     $pizzaOrder->refresh();
 
-    expect($pizzaOrder->status->value)->toBe(PizzaOrderStatus::IN_OVEN->value);
-    expect($pizzaOrder->status_updated_at)->not->toBeNull();
+    expect($pizzaOrder)
+        ->status->value->toBe(PizzaOrderStatus::IN_OVEN->value)
+        ->status_updated_at->not->toBeNull();
 });
 
 it('returns 200 if the status is already set', function () {
-    $pizzaOrder = PizzaOrder::factory()->create([
-        'status' => PizzaOrderStatus::WORKING->value,
-    ]);
+    $pizzaOrder = createPizzaOrderWithStatus();
 
-    $response = $this->patchJson(route('pizza-order-status.update', $pizzaOrder), [
+    $response = updatePizzaOrderRoute($pizzaOrder, [
         'status' => PizzaOrderStatus::WORKING->value,
     ]);
 
     $response->assertOk()
-        ->assertJson([
-            'message' => 'The status is already set to the requested value.',
-        ]);
+        ->assertJson(['message' => 'The status is already set to the requested value.']);
 
     $pizzaOrder->refresh();
 
-    expect($pizzaOrder->status->value)->toBe(PizzaOrderStatus::WORKING->value);
+    expect($pizzaOrder)
+        ->status->value->toBe(PizzaOrderStatus::WORKING->value);
 });
 
-it('validates that the status must be a valid enum value', function () {
-    $pizzaOrder = PizzaOrder::factory()->create();
+it('fails validation when status is not a valid enum value', function () {
+    $pizzaOrder = createPizzaOrderWithStatus();
 
-    $response = $this->patchJson(route('pizza-order-status.update', $pizzaOrder), [
+    $response = updatePizzaOrderRoute($pizzaOrder, [
         'status' => 'invalid_status',
     ]);
 
@@ -58,20 +64,21 @@ it('validates that the status must be a valid enum value', function () {
 
     $pizzaOrder->refresh();
 
-    expect($pizzaOrder->status->value)->not->toBe('invalid_status');
+    expect($pizzaOrder)
+        ->status->value->not->toBe('invalid_status');
 });
 
 it('requires the status field to be provided', function () {
-    $pizzaOrder = PizzaOrder::factory()->create();
+    $pizzaOrder = createPizzaOrderWithStatus();
 
-    $response = $this->patchJson(route('pizza-order-status.update', $pizzaOrder), []);
+    $response = updatePizzaOrderRoute($pizzaOrder, []);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['status']);
 });
 
-it('returns a 404 if the pizza order does not exist', function () {
-    $response = $this->patchJson(route('pizza-order-status.update', 9999), [
+it('returns 404 if the pizza order does not exist', function () {
+    $response = updatePizzaOrderRoute(9999, [
         'status' => PizzaOrderStatus::READY->value,
     ]);
 
