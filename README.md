@@ -7,6 +7,106 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# Cheesy Does It Pizza Restaurant Tech Challenge
+
+Welcome to the **Cheesy Does It** Pizza Orders web app! This web app is a Laravel + Vue.js implementation for enhancing customer experience by allowing Cheesy Does It to update pizza order statuses on their POS system, which communicates updates to the restaurant's website. It uses **Laravel Reverb** for event handling and leverages **Laravel**, **Vue.js**, and **Tailwind CSS** for the backend and frontend.
+
+---
+
+## **Objective**
+
+The challenge requires building a **module** in the restaurant's POS system using **Laravel**. This module integrates with the restaurant’s website to enable real-time updates for customers to track their pizza orders. More specifically:
+- Updates occur when the pizza is **started**, **placed in the oven**, or **ready for delivery/pickup**.
+- A simple UI for Cheesy Does It is built to manage pizza order statuses using **Vue.js**.
+
+---
+
+## **Features**
+
+- **POS Status Updates:** A basic interface is provided for Cheesy Does It to update pizza statuses.
+- **Communication Protocol:** Laravel emits status updates through **Laravel Reverb**, which can be consumed by the restaurant's website for real-time customer updates.
+- **Prebuilt Web Integration:** The app is designed to integrate seamlessly with an imagined API provided by the website.
+- **User Authentication:** Cheesy Does It login is necessary to access the dashboard and manage pizza statuses.
+
+---
+
+## **Setup Instructions**
+
+Follow these steps to run the project locally:
+
+---
+
+### **Installation**
+
+1. **Clone the Repository**
+
+2. **Install Backend Dependencies**
+   Run the following command to install Laravel dependencies:
+   ```bash
+   composer install
+   ```
+
+3. **Install Frontend Dependencies**
+   Run the following command to install `npm` dependencies for Vue.js and Tailwind CSS:
+   ```bash
+   npm install
+   ```
+
+4. **Set Up the Environment**
+   Copy the `.env.example` file and configure your application environment:
+   ```bash
+   cp .env.example .env
+   ```
+
+5. **Generate the Application Key**
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Run Database Migrations and Seeding**
+   To set up the necessary tables and seed the database with test data including pizza orders:
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. **Start the Backend Server**
+   Run the Laravel development server:
+   ```bash
+   php artisan serve
+   ```
+
+8. **Start the Frontend**
+   Compile the Vue.js assets using:
+   ```bash
+   npm run dev
+   ```
+
+9. **Start Reverb**
+   Laravel Reverb is used to handle event broadcasting. Run the following command:
+   ```bash
+   php artisan reverb:start
+   ```
+
+   Ensure this is running in a terminal tab, as it is essential for real-time communication.
+
+---
+
+### **Access the Application**
+
+1. Open your browser and visit: `pizza.test`
+2. After you create a new user or use the Test User to log in (test@example.com, password) you can get to the Pizza Orders from the nav next to the Dashboard.
+3. Clicking the buttons will update the status
+
+
+Note:
+I have more work to do on styling the frontend and getting the buttons to work better.
+I'll be adding more commits as I get this finished. But please feel free to give me your feeback before I'm done.
+Thanks!
+
+
+
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
