@@ -98,9 +98,22 @@ Follow these steps to run the project locally:
 3. Clicking the buttons will update the status
 
 
+### **Important Files**
+- PizzaOrderStatusController.php
+- PizzaOrderTrackingController.php
+- app/Models/PizzaOrder.php
+- app/Enums/PizzaOrderStatus.php
+- resources/js/Pages/PizzaOrderDashboard.vue
+- resources/js/bootstrap.js
+- routes/web.php
+- tests/Feature/PestPizzaOrderControllers
+- tests/Feature/PhpunitPizzaOrderControllers
+- tests/Unit/PestPizzaOrder
+- tests/Unit/PhpunitPizzaOrder
+
 Note:
 I have more work to do on styling the frontend and getting the buttons to work better.
-I'll be adding more commits as I get this finished. But please feel free to give me your feeback before I'm done.
+I'll be adding more commits as I get this finished. But please feel free to give me your feedback before I'm done.
 Thanks!
 
 
