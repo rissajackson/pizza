@@ -8,19 +8,12 @@ use Inertia\Response;
 
 class PizzaOrderTrackingController extends Controller
 {
-    /**
-     * Display the dashboard with pizza orders.
-     *
-     * @return Response
-     */
     public function index(): Response
     {
-        $orders = PizzaOrder::all()->map(function ($order) {
-            return [
-                'id' => $order->id,
-                'status' => $order->status->label() // Assuming status->label formats user-friendly labels
-            ];
-        });
+        $orders = PizzaOrder::all()->map(fn ($order) => [
+            'id' => $order->id,
+            'status' => $order->status->label(),
+        ]);
 
         return Inertia::render('PizzaOrderDashboard', [
             'orders' => $orders,
