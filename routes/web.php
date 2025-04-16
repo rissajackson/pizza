@@ -29,7 +29,7 @@ Route::patch('pizza-orders/{pizzaOrder}/status', [PizzaOrderStatusController::cl
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return Inertia::render('Dashboard');
     })->name('dashboard');
 
     Route::get('/pizza-orders', [PizzaOrderTrackingController::class, 'index'])
