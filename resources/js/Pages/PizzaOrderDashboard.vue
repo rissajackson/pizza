@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { reactive, onMounted, onBeforeUnmount } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -11,7 +11,6 @@ const { orders } = defineProps({
     },
 });
 
-// Use deep reactivity to ensure updates trigger DOM updates
 const reactiveOrders = reactive(orders);
 
 /**
@@ -22,7 +21,6 @@ function subscribeToOrderUpdates(orderId) {
         .listen('PizzaOrderStatusUpdated', (event) => {
             console.log(`Broadcast received for Order #${orderId}:`, event);
 
-            // Find the corresponding order and update it reactively
             const orderToUpdate = reactiveOrders.find((order) => order.id === orderId);
             if (orderToUpdate) {
                 orderToUpdate.status = event.status;
@@ -36,7 +34,6 @@ onMounted(() => {
         return;
     }
 
-    // Subscribe to updates for each order
     reactiveOrders.forEach((order) => {
         subscribeToOrderUpdates(order.id);
     });
@@ -67,7 +64,7 @@ async function updateOrderStatus(orderId, newStatus) {
         }
 
         console.log(`Order ${orderId} status updated to ${newStatus}`);
-    } catch (error) {
+     } catch (error) {
         console.error('Error updating order status:', error);
         alert('Failed to update order status. Please try again.');
     }
@@ -95,31 +92,37 @@ async function updateOrderStatus(orderId, newStatus) {
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <span class="font-semibold text-gray-800">Order #{{ order.id }}</span> –
-                                            <span :class="[
-                                                order.status === 'pending' ? 'italic text-gray-500' :
-                                                order.status === 'working' ? 'italic text-blue-500' :
-                                                order.status === 'in_oven' ? 'italic text-orange-500' :
-                                                'italic text-green-500'
-                                            ]">
+                                            <span :class="{
+                                            'italic text-black-500 font-bold': order.status === 'Received',
+                                            'italic text-blue-500 font-bold': order.status === 'Working',
+                                            'italic text-orange-500 font-bold': order.status === 'In Oven',
+                                            'italic text-green-500 font-bold': order.status === 'Ready'
+                                            }">
                                                 {{ order.status }}
                                             </span>
                                         </div>
                                         <div class="flex gap-2">
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'working')"
-                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                class="text-white font-bold py-2 px-4 rounded"
+                                                bgColorClass="bg-blue-500 hover:bg-blue-700"
+                                                :disabled="order.status === 'Working'"
                                             >
                                                 Start
                                             </PrimaryButton>
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'in_oven')"
-                                                class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+                                                class="text-white font-bold py-2 px-4 rounded"
+                                                bgColorClass="bg-orange-500 hover:bg-orange-700"
+                                                :disabled="order.status === 'In Oven'"
                                             >
                                                 Oven
                                             </PrimaryButton>
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'ready')"
-                                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                                class="text-white font-bold py-2 px-4 rounded"
+                                                bgColorClass="bg-green-500 hover:bg-green-700"
+                                                :disabled="order.status === 'Ready'"
                                             >
                                                 Ready
                                             </PrimaryButton>
