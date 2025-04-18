@@ -57,6 +57,20 @@ Follow these steps to run the project locally:
    ```bash
    cp .env.example .env
    ```
+   Update the `.env` Reverb keys:
+    ```
+   REVERB_APP_ID=
+   REVERB_APP_KEY=
+   REVERB_APP_SECRET=
+   ```
+   You can run these in the terminal to create them:
+    ```bash
+   echo "REVERB_APP_ID=$(openssl rand -hex 8)" && echo "REVERB_APP_KEY=$(openssl rand -hex 16)" && echo "REVERB_APP_SECRET=$(openssl rand -hex 32)"
+   ```
+    You can also have the send their values directly to the .env:
+    ```bash
+   echo "REVERB_APP_ID=$(openssl rand -hex 8)" >> .env && echo "REVERB_APP_KEY=$(openssl rand -hex 16)" >> .env && echo "REVERB_APP_SECRET=$(openssl rand -hex 32)" >> .env
+   ```
 
 5. **Generate the Application Key**
    ```bash
@@ -87,14 +101,29 @@ Follow these steps to run the project locally:
    php artisan reverb:start
    ```
 
-   Ensure this is running in a terminal tab, as it is essential for real-time communication.
+   **Ensure this is running in a terminal tab, as it is essential for real-time communication, and make sure you updated the .env!**
+   
+    Update the `.env` Reverb keys:
+    ```
+   REVERB_APP_ID=
+   REVERB_APP_KEY=
+   REVERB_APP_SECRET=
+   ```
+   You can run these in the terminal to create them:
+    ```bash
+   echo "REVERB_APP_ID=$(openssl rand -hex 8)" && echo "REVERB_APP_KEY=$(openssl rand -hex 16)" && echo "REVERB_APP_SECRET=$(openssl rand -hex 32)"
+   ```
+   You can also have the send their values directly to the .env:
+    ```bash
+   echo "REVERB_APP_ID=$(openssl rand -hex 8)" >> .env && echo "REVERB_APP_KEY=$(openssl rand -hex 16)" >> .env && echo "REVERB_APP_SECRET=$(openssl rand -hex 32)" >> .env
+   ```
 
 ---
 
 ### **Access the Application**
 
 1. Open your browser and visit: `pizza.test`
-2. After you create a new user or use the Test User to log in (test@example.com, password) you can get to the Pizza Orders from the nav next to the Dashboard.
+2. After you create a new user or use the Test User to log in (test@example.com, password) you can get to the Pizza Orders from the nav next to the Homepage.
 3. Clicking the buttons will update the status
 
 
