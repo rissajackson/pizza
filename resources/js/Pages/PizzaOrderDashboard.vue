@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted, onBeforeUnmount } from 'vue';
+import { reactive, onMounted, onBeforeUnmount, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -69,6 +69,23 @@ async function updateOrderStatus(orderId, newStatus) {
         alert('Failed to update order status. Please try again.');
     }
 }
+
+const getStatusWithEmoji = computed(() => {
+    return (status) => {
+        switch (status) {
+            case 'Received':
+                return '📥 Received';
+            case 'Working':
+                return '⚒️ Working';
+            case 'In Oven':
+                return '🔥 In Oven';
+            case 'Ready':
+                return '✅ Ready';
+            default:
+                return status;
+        }
+    };
+});
 </script>
 
 <template>
@@ -76,8 +93,8 @@ async function updateOrderStatus(orderId, newStatus) {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Pizza Order Dashboard
+            <h2 class="text-xl font-semibold leading-tight text-red-500">
+                Cheesy Does It Pizza Order Dashboard
             </h2>
         </template>
 
@@ -91,21 +108,21 @@ async function updateOrderStatus(orderId, newStatus) {
                                 <li v-for="order in reactiveOrders" :key="order.id" class="mb-4">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <span class="font-semibold text-gray-800">Order #{{ order.id }}</span> –
+                                            <span class="font-semibold font-mono text-gray-800">Order #{{ order.id }}</span> –
                                             <span :class="{
-                                            'italic text-black-500 font-bold': order.status === 'Received',
-                                            'italic text-blue-500 font-bold': order.status === 'Working',
-                                            'italic text-orange-500 font-bold': order.status === 'In Oven',
-                                            'italic text-green-500 font-bold': order.status === 'Ready'
+                                            'italic text-red-500 font-bold font-mono': order.status === 'Received',
+                                            'italic text-blue-500 font-bold font-mono': order.status === 'Working',
+                                            'italic text-orange-500 font-bold font-mono': order.status === 'In Oven',
+                                            'italic text-green-500 font-bold font-mono': order.status === 'Ready'
                                             }">
-                                                {{ order.status }}
+                                                {{ getStatusWithEmoji(order.status) }}
                                             </span>
                                         </div>
                                         <div class="flex gap-2">
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'working')"
                                                 class="text-white font-bold py-2 px-4 rounded"
-                                                bgColorClass="bg-blue-500 hover:bg-blue-700"
+                                                bgColorClass="bg-blue-400 hover:bg-blue-600"
                                                 :disabled="order.status === 'Working'"
                                             >
                                                 Start
@@ -113,7 +130,7 @@ async function updateOrderStatus(orderId, newStatus) {
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'in_oven')"
                                                 class="text-white font-bold py-2 px-4 rounded"
-                                                bgColorClass="bg-orange-500 hover:bg-orange-700"
+                                                bgColorClass="bg-orange-400 hover:bg-orange-600"
                                                 :disabled="order.status === 'In Oven'"
                                             >
                                                 Oven
@@ -121,7 +138,7 @@ async function updateOrderStatus(orderId, newStatus) {
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'ready')"
                                                 class="text-white font-bold py-2 px-4 rounded"
-                                                bgColorClass="bg-green-500 hover:bg-green-700"
+                                                bgColorClass="bg-green-400 hover:bg-green-600"
                                                 :disabled="order.status === 'Ready'"
                                             >
                                                 Ready
