@@ -28,8 +28,8 @@ class PizzaOrder extends Model
 
     protected static function booted(): void
     {
-        static::updating(function (self $pizzaOrder) {
-            if ($pizzaOrder->isDirty('status')) {
+        static::updated(function (self $pizzaOrder) {
+            if ($pizzaOrder->wasChanged('status')) {
                 PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
             }
         });
