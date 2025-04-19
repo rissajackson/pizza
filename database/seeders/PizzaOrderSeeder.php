@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\PizzaOrder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PizzaOrderSeeder extends Seeder

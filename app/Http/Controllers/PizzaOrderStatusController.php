@@ -11,16 +11,12 @@ class PizzaOrderStatusController extends Controller
 {
     /**
      * Update the status of a pizza order.
-     *
-     * @param Request $request
-     * @param PizzaOrder $pizzaOrder
-     * @return JsonResponse
      */
     public function update(Request $request, PizzaOrder $pizzaOrder): JsonResponse
     {
         $validated = $request->validate([
             'status' => ['required', 'string', function (string $attribute, string $value, callable $fail) {
-                if (!in_array($value, PizzaOrderStatusEnum::values(), true)) {
+                if (! in_array($value, PizzaOrderStatusEnum::values(), true)) {
                     $fail("The selected {$attribute} is invalid.");
                 }
             }],

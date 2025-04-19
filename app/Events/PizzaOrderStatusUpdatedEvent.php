@@ -13,13 +13,11 @@ class PizzaOrderStatusUpdatedEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public PizzaOrder $pizzaOrder)
-    {
-    }
+    public function __construct(public PizzaOrder $pizzaOrder) {}
 
     public function broadcastOn(): Channel
     {
-        return new Channel('pizza-order.' . $this->pizzaOrder->id);
+        return new Channel('pizza-order.'.$this->pizzaOrder->id);
     }
 
     public function broadcastWith(): array

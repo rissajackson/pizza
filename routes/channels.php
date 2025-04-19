@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Broadcast;
 use App\Models\PizzaOrder;
+use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('pizza-order.{orderId}', function ($user, $orderId) {
     // Check if the order exists
     $pizzaOrder = PizzaOrder::find($orderId);
 
-    if (!$pizzaOrder) {
+    if (! $pizzaOrder) {
         return false; // Or, you could throw an exception:  throw new \Illuminate\Broadcasting\BroadcastException('Order not found.');
     }
 

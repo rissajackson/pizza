@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\PhpunitPizzaOrderControllers;
 
-use App\Models\User;
 use App\Models\PizzaOrder;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,8 +19,7 @@ class PizzaOrderTrackingControllerTest extends TestCase
         $response = $this->actingAs($user)->get('/pizza-orders');
 
         $response->assertOk()
-            ->assertInertia(fn ($page) =>
-            $page
+            ->assertInertia(fn ($page) => $page
                 ->component('PizzaOrderDashboard')
                 ->has('orders', 3)
                 ->where('auth.user.id', $user->id)

@@ -34,7 +34,7 @@ class PizzaOrderStatusControllerTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Status updated successfully!')
+            ->assertJson(fn (AssertableJson $json) => $json->where('message', 'Status updated successfully!')
                 ->where('pizzaOrder.id', $this->pizzaOrder->id)
                 ->where('pizzaOrder.status', $newStatus)
             );

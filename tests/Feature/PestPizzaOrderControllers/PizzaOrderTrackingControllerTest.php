@@ -15,8 +15,7 @@ it('renders the pizza order dashboard with orders and auth data', function () {
 
     $this->get(route('pizza-orders.index'))
         ->assertOk()
-        ->assertInertia(fn (Assert $page) =>
-        $page
+        ->assertInertia(fn (Assert $page) => $page
             ->component('PizzaOrderDashboard')
             ->has('orders', 3)
             ->where('orders.0.id', $orders[0]->id)

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PizzaOrderStatusController;
 use App\Http\Controllers\PizzaOrderTrackingController;
 use App\Http\Controllers\ProfileController;
