@@ -1,7 +1,9 @@
 import axios from 'axios';
 import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 window.axios = axios;
+window.Pusher = Pusher;
 
 // Ensure Axios sends the `X-Requested-With` header with all requests
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -16,11 +18,3 @@ window.Echo = new Echo({
     forceTLS: import.meta.env.VITE_REVERB_SCHEME === 'https', // TLS flag based on scheme
     disableStats: true, // Disables Pusher stats collection, not applicable to Reverb
 });
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allow your team to quickly build robust real-time web applications.
- */
-
-import './echo';
