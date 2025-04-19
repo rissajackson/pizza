@@ -1,3 +1,20 @@
+<script setup>
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+    bgColorClass: {
+        type: String,
+        default: 'bg-blue-400',
+    },
+    bgColorHoverClass: {
+        type: String,
+        default: 'hover:bg-blue-600',
+    }
+});
+</script>
+
 <template>
     <button
         :disabled="disabled"
@@ -10,20 +27,3 @@
         <slot />
     </button>
 </template>
-
-<script setup>
-const props = defineProps({
-    disabled: {
-        type: Boolean,
-        default: false,
-    },
-    bgColorClass: {
-        type: String,
-        default: 'bg-blue-400', // Default active state color.
-    },
-    bgColorHoverClass: {
-        type: String,
-        default: 'hover:bg-blue-600', // Default active state color.
-    }
-});
-</script>

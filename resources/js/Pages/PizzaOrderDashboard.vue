@@ -13,6 +13,34 @@ const { orders } = defineProps({
 
 const reactiveOrders = reactive(orders);
 
+const getStatusWithEmoji = computed(() => {
+    return (status) => {
+        switch (status) {
+            case 'Received':
+                return '📥 Received';
+            case 'Working':
+                return '⚒️ Working';
+            case 'In Oven':
+                return '🔥 In Oven';
+            case 'Ready':
+                return '✅ Ready';
+            default:
+                return status;
+        }
+    };
+});
+
+onMounted(() => {
+    if (reactiveOrders.length === 0) {
+        console.warn('No orders available to track.');
+        return;
+    }
+
+    reactiveOrders.forEach((order) => {
+        subscribeToOrderUpdates(order.id);
+    });
+});
+
 /**
  * Subscribe to WebSocket updates for a specific order ID.
  */
@@ -27,23 +55,6 @@ function subscribeToOrderUpdates(orderId) {
             }
         });
 }
-
-onMounted(() => {
-    if (reactiveOrders.length === 0) {
-        console.warn('No orders available to track.');
-        return;
-    }
-
-    reactiveOrders.forEach((order) => {
-        subscribeToOrderUpdates(order.id);
-    });
-});
-
-onBeforeUnmount(() => {
-    reactiveOrders.forEach((order) => {
-        window.Echo.leave(`pizza-order.${order.id}`);
-    });
-});
 
 async function updateOrderStatus(orderId, newStatus) {
     console.log('hey you clicked a button', orderId, newStatus);
@@ -70,21 +81,10 @@ async function updateOrderStatus(orderId, newStatus) {
     }
 }
 
-const getStatusWithEmoji = computed(() => {
-    return (status) => {
-        switch (status) {
-            case 'Received':
-                return '📥 Received';
-            case 'Working':
-                return '⚒️ Working';
-            case 'In Oven':
-                return '🔥 In Oven';
-            case 'Ready':
-                return '✅ Ready';
-            default:
-                return status;
-        }
-    };
+onBeforeUnmount(() => {
+    reactiveOrders.forEach((order) => {
+        window.Echo.leave(`pizza-order.${order.id}`);
+    });
 });
 </script>
 
