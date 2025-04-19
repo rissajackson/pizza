@@ -131,7 +131,14 @@ Follow these steps to run the project locally:
 - PizzaOrderStatusController.php
 - PizzaOrderTrackingController.php
 - app/Models/PizzaOrder.php
-- app/Enums/PizzaOrderStatus.php
+- app/Enums/PizzaOrderStatusEnum.php
+- app/Events/PizzaOrderStatusUpdatedEvent.php
+- database/factories/PizzaOrderFactory.php
+- database/migrations/2025_04_11_132906_create_pizza_orders_table.php
+- database/seeders/PizzaOrderSeeder.php
+- resources/js/Components/PrimaryButton.vue
+- resources/js/Layouts/AuthenticatedLayout.vue
+- resources/js/Pages/Dashboard.vue
 - resources/js/Pages/PizzaOrderDashboard.vue
 - resources/js/bootstrap.js
 - routes/web.php
