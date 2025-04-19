@@ -122,7 +122,8 @@ const getStatusWithEmoji = computed(() => {
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'working')"
                                                 class="text-white font-bold py-2 px-4 rounded"
-                                                bgColorClass="bg-blue-400 hover:bg-blue-600"
+                                                bgColorClass="bg-blue-400"
+                                                bgColorHoverClass="hover:bg-blue-600"
                                                 :disabled="order.status === 'Working'"
                                             >
                                                 Start
@@ -130,7 +131,8 @@ const getStatusWithEmoji = computed(() => {
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'in_oven')"
                                                 class="text-white font-bold py-2 px-4 rounded"
-                                                bgColorClass="bg-orange-400 hover:bg-orange-600"
+                                                bgColorClass="bg-orange-400"
+                                                bgColorHoverClass="hover:bg-orange-600"
                                                 :disabled="order.status === 'In Oven'"
                                             >
                                                 Oven
@@ -138,7 +140,8 @@ const getStatusWithEmoji = computed(() => {
                                             <PrimaryButton
                                                 @click="updateOrderStatus(order.id, 'ready')"
                                                 class="text-white font-bold py-2 px-4 rounded"
-                                                bgColorClass="bg-green-400 hover:bg-green-600"
+                                                bgColorClass="bg-green-400"
+                                                bgColorHoverClass="hover:bg-green-600"
                                                 :disabled="order.status === 'Ready'"
                                             >
                                                 Ready
