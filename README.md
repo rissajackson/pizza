@@ -140,14 +140,6 @@ Follow these steps to run the project locally:
 - tests/Unit/PestPizzaOrder
 - tests/Unit/PhpunitPizzaOrder
 
-Note:
-I have more work to do on styling the frontend and getting the buttons to work better.
-I'll be adding more commits as I get this finished. But please feel free to give me your feedback before I'm done.
-Thanks!
-
-
-
-
 
 ## About Laravel
 
