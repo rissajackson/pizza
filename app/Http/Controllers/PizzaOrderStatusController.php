@@ -22,10 +22,10 @@ class PizzaOrderStatusController extends Controller
             }],
         ]);
 
-        if ($pizzaOrder->status->value === $validated['status']) { // Compare `value` of enum
+        if ($pizzaOrder->status->value === $validated['status']) {
             return response()->json([
                 'message' => 'The status is already set to the requested value.',
-            ], 200);
+            ], 422);
         }
 
         $pizzaOrder->status = $validated['status'];
