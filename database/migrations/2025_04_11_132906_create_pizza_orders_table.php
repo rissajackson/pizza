@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('order_number', 50)->unique();
             $table->string('pizza_type', 50);
             $table->enum('order_type', ['pickup', 'delivery']);
-            $table->string('status')->default(PizzaOrderStatus::RECEIVED->value);
+            $table->string('status')->default(PizzaOrderStatusEnum::RECEIVED->value);
             $table->timestamp('status_updated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -1,16 +1,16 @@
 <?php
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 
 it('returns the correct label for all statuses', function () {
     $expectedLabels = collect([
-        PizzaOrderStatus::RECEIVED->value => 'Received',
-        PizzaOrderStatus::WORKING->value => 'Working',
-        PizzaOrderStatus::IN_OVEN->value => 'In Oven',
-        PizzaOrderStatus::READY->value => 'Ready',
+        PizzaOrderStatusEnum::RECEIVED->value => 'Received',
+        PizzaOrderStatusEnum::WORKING->value => 'Working',
+        PizzaOrderStatusEnum::IN_OVEN->value => 'In Oven',
+        PizzaOrderStatusEnum::READY->value => 'Ready',
     ]);
 
-    foreach (PizzaOrderStatus::cases() as $status) {
+    foreach (PizzaOrderStatusEnum::cases() as $status) {
         expect($status->label())->toBe($expectedLabels[$status->value]);
     }
 });

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\PhpunitPizzaOrderControllers;
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 use App\Models\PizzaOrder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -18,14 +18,14 @@ class PizzaOrderStatusControllerTest extends TestCase
     {
         parent::setUp();
         $this->pizzaOrder = PizzaOrder::factory()->create([
-            'status' => PizzaOrderStatus::WORKING,
+            'status' => PizzaOrderStatusEnum::WORKING,
             'created_at' => now()->subMinutes(10),
         ]);
     }
 
     public function test_updates_status_successfully(): void
     {
-        $newStatus = PizzaOrderStatus::IN_OVEN->value;
+        $newStatus = PizzaOrderStatusEnum::IN_OVEN->value;
 
         $response = $this->patchJson(
             route('pizza-order-status.update', $this->pizzaOrder->id),
@@ -53,7 +53,7 @@ class PizzaOrderStatusControllerTest extends TestCase
     {
         $response = $this->patchJson(
             route('pizza-order-status.update', $this->pizzaOrder->id),
-            ['status' => PizzaOrderStatus::WORKING->value]
+            ['status' => PizzaOrderStatusEnum::WORKING->value]
         );
 
         $response
@@ -62,7 +62,7 @@ class PizzaOrderStatusControllerTest extends TestCase
 
         $this->assertDatabaseHas('pizza_orders', [
             'id' => $this->pizzaOrder->id,
-            'status' => PizzaOrderStatus::WORKING->value,
+            'status' => PizzaOrderStatusEnum::WORKING->value,
         ]);
     }
 
@@ -79,7 +79,7 @@ class PizzaOrderStatusControllerTest extends TestCase
 
         $this->assertDatabaseHas('pizza_orders', [
             'id' => $this->pizzaOrder->id,
-            'status' => PizzaOrderStatus::WORKING->value,
+            'status' => PizzaOrderStatusEnum::WORKING->value,
         ]);
     }
 
@@ -87,7 +87,7 @@ class PizzaOrderStatusControllerTest extends TestCase
     {
         $response = $this->patchJson(
             route('pizza-order-status.update', 99999),
-            ['status' => PizzaOrderStatus::READY->value]
+            ['status' => PizzaOrderStatusEnum::READY->value]
         );
 
         $response->assertNotFound();
@@ -106,7 +106,7 @@ class PizzaOrderStatusControllerTest extends TestCase
 
         $this->assertDatabaseHas('pizza_orders', [
             'id' => $this->pizzaOrder->id,
-            'status' => PizzaOrderStatus::WORKING->value,
+            'status' => PizzaOrderStatusEnum::WORKING->value,
         ]);
     }
 }

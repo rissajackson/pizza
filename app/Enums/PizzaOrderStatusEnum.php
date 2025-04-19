@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum PizzaOrderStatus: string
+enum PizzaOrderStatusEnum: string
 {
     case RECEIVED = 'received';
     case WORKING = 'working';

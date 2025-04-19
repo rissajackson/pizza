@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 use App\Models\PizzaOrder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +18,7 @@ class PizzaOrderFactory extends Factory
             'pizza_type' => $this->faker->randomElement([
                 'Margherita', 'Pepperoni', 'Veggie Lovers', 'Meat Lovers', 'Hawaiian', 'Supreme',
             ]),
-            'status' => $this->faker->randomElement(PizzaOrderStatus::cases())->value,
+            'status' => $this->faker->randomElement(PizzaOrderStatusEnum::cases())->value,
             'order_type' => $this->faker->randomElement(['pickup', 'delivery']),
             'created_at' => now(),
             'updated_at' => now(),

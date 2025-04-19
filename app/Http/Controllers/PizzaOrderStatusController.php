@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 use App\Models\PizzaOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class PizzaOrderStatusController extends Controller
     {
         $validated = $request->validate([
             'status' => ['required', 'string', function (string $attribute, string $value, callable $fail) {
-                if (!in_array($value, PizzaOrderStatus::values(), true)) {
+                if (!in_array($value, PizzaOrderStatusEnum::values(), true)) {
                     $fail("The selected {$attribute} is invalid.");
                 }
             }],

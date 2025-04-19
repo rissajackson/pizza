@@ -18,7 +18,7 @@ const reactiveOrders = reactive(orders);
  */
 function subscribeToOrderUpdates(orderId) {
     window.Echo.channel(`pizza-order.${orderId}`)
-        .listen('PizzaOrderStatusUpdated', (event) => {
+        .listen('PizzaOrderStatusUpdatedEvent', (event) => {
             console.log(`Broadcast received for Order #${orderId}:`, event);
 
             const orderToUpdate = reactiveOrders.find((order) => order.id === orderId);

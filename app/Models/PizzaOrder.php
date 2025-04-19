@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\PizzaOrderStatus;
-use App\Events\PizzaOrderStatusUpdated;
+use App\Enums\PizzaOrderStatusEnum;
+use App\Events\PizzaOrderStatusUpdatedEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,14 +23,14 @@ class PizzaOrder extends Model
     protected $casts = [
         'id' => 'integer',
         'status_updated_at' => 'datetime',
-        'status' => PizzaOrderStatus::class,
+        'status' => PizzaOrderStatusEnum::class,
     ];
 
     protected static function booted(): void
     {
         static::updating(function (self $pizzaOrder) {
             if ($pizzaOrder->isDirty('status')) {
-                PizzaOrderStatusUpdated::dispatch($pizzaOrder);
+                PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
             }
         });
     }

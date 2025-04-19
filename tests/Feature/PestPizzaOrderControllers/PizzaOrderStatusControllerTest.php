@@ -1,9 +1,9 @@
 <?php
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 use App\Models\PizzaOrder;
 
-function createPizzaOrderWithStatus(string $status = PizzaOrderStatus::WORKING->value): PizzaOrder
+function createPizzaOrderWithStatus(string $status = PizzaOrderStatusEnum::WORKING->value): PizzaOrder
 {
     return PizzaOrder::factory()->create(['status' => $status]);
 }
@@ -17,7 +17,7 @@ it('updates the status of an order successfully', function () {
     $pizzaOrder = createPizzaOrderWithStatus();
 
     $response = updatePizzaOrderRoute($pizzaOrder, [
-        'status' => PizzaOrderStatus::IN_OVEN->value,
+        'status' => PizzaOrderStatusEnum::IN_OVEN->value,
     ]);
 
     $response->assertOk()
@@ -25,14 +25,14 @@ it('updates the status of an order successfully', function () {
             'message' => 'Status updated successfully!',
             'pizzaOrder' => [
                 'id' => $pizzaOrder->id,
-                'status' => PizzaOrderStatus::IN_OVEN->value,
+                'status' => PizzaOrderStatusEnum::IN_OVEN->value,
             ],
         ]);
 
     $pizzaOrder->refresh();
 
     expect($pizzaOrder)
-        ->status->value->toBe(PizzaOrderStatus::IN_OVEN->value)
+        ->status->value->toBe(PizzaOrderStatusEnum::IN_OVEN->value)
         ->status_updated_at->not->toBeNull();
 });
 
@@ -40,7 +40,7 @@ it('returns 200 if the status is already set', function () {
     $pizzaOrder = createPizzaOrderWithStatus();
 
     $response = updatePizzaOrderRoute($pizzaOrder, [
-        'status' => PizzaOrderStatus::WORKING->value,
+        'status' => PizzaOrderStatusEnum::WORKING->value,
     ]);
 
     $response->assertOk()
@@ -49,7 +49,7 @@ it('returns 200 if the status is already set', function () {
     $pizzaOrder->refresh();
 
     expect($pizzaOrder)
-        ->status->value->toBe(PizzaOrderStatus::WORKING->value);
+        ->status->value->toBe(PizzaOrderStatusEnum::WORKING->value);
 });
 
 it('fails validation when status is not a valid enum value', function () {
@@ -79,7 +79,7 @@ it('requires the status field to be provided', function () {
 
 it('returns 404 if the pizza order does not exist', function () {
     $response = updatePizzaOrderRoute(9999, [
-        'status' => PizzaOrderStatus::READY->value,
+        'status' => PizzaOrderStatusEnum::READY->value,
     ]);
 
     $response->assertStatus(404);

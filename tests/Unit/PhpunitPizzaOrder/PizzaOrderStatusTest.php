@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\PhpunitPizzaOrder;
 
-use App\Enums\PizzaOrderStatus;
+use App\Enums\PizzaOrderStatusEnum;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -12,13 +12,13 @@ class PizzaOrderStatusTest extends TestCase
     public function it_returns_the_correct_label_for_all_statuses()
     {
         $expectedLabels = [
-            PizzaOrderStatus::RECEIVED->value => 'Received',
-            PizzaOrderStatus::WORKING->value => 'Working',
-            PizzaOrderStatus::IN_OVEN->value => 'In Oven',
-            PizzaOrderStatus::READY->value => 'Ready',
+            PizzaOrderStatusEnum::RECEIVED->value => 'Received',
+            PizzaOrderStatusEnum::WORKING->value => 'Working',
+            PizzaOrderStatusEnum::IN_OVEN->value => 'In Oven',
+            PizzaOrderStatusEnum::READY->value => 'Ready',
         ];
 
-        foreach (PizzaOrderStatus::cases() as $status) {
+        foreach (PizzaOrderStatusEnum::cases() as $status) {
             $this->assertSame(
                 $expectedLabels[$status->value],
                 $status->label(),
