@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PizzaOrderStatusEnum;
+use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,10 @@ class PizzaOrderStatusController extends Controller
 {
     /**
      * Update the status of a pizza order.
+     *
+     * @param Request $request
+     * @param PizzaOrder $pizzaOrder
+     * @return JsonResponse
      */
     public function update(Request $request, PizzaOrder $pizzaOrder): JsonResponse
     {
@@ -29,6 +34,8 @@ class PizzaOrderStatusController extends Controller
             'status' => $validated['status'],
             'status_updated_at' => now(),
         ]);
+
+        PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
 
         return response()->json([
             'message' => 'Status updated successfully!',

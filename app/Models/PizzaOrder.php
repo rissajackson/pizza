@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\PizzaOrderStatusEnum;
-use App\Events\PizzaOrderStatusUpdatedEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +17,7 @@ class PizzaOrder extends Model
         'pizza_type',
         'status',
         'order_type',
+        'status_updated_at',
     ];
 
     protected $casts = [
@@ -25,15 +25,4 @@ class PizzaOrder extends Model
         'status_updated_at' => 'datetime',
         'status' => PizzaOrderStatusEnum::class,
     ];
-
-    protected static function booted(): void
-    {
-        static::updated(function (self $pizzaOrder) {
-            if ($pizzaOrder->wasChanged('status')) {
-                PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
-            } else {
-                logger()->info('Event NOT dispatched - no status change detected.');
-            }
-        });
-    }
 }

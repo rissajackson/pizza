@@ -53,43 +53,11 @@ class PizzaOrderTest extends TestCase
     {
         $pizzaOrder = PizzaOrder::factory()->create();
 
-        // Ensure the model exists
         $this->assertNotNull(PizzaOrder::find($pizzaOrder->id));
 
-        // Soft delete the model
         $pizzaOrder->delete();
 
-        // Assert the model is no longer findable, but still exists in the database
         $this->assertNull(PizzaOrder::find($pizzaOrder->id));
         $this->assertNotNull(PizzaOrder::withTrashed()->find($pizzaOrder->id));
-    }
-
-    #[Test]
-    public function it_dispatches_pizza_order_status_updated_event()
-    {
-        Event::fake();
-
-        $pizzaOrder = PizzaOrder::factory()->create();
-
-        PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
-
-        Event::assertDispatched(PizzaOrderStatusUpdatedEvent::class, function ($event) use ($pizzaOrder) {
-            return $event->pizzaOrder->is($pizzaOrder);
-        });
-    }
-
-    #[Test]
-    public function it_does_not_dispatch_pizza_order_status_updated_event_if_status_is_unchanged()
-    {
-        Event::fake();
-
-        $pizzaOrder = PizzaOrder::factory()->create([
-            'status' => PizzaOrderStatusEnum::RECEIVED,
-        ]);
-
-        $pizzaOrder->customer_name = 'Jane Doe';
-        $pizzaOrder->save();
-
-        Event::assertNotDispatched(PizzaOrderStatusUpdatedEvent::class);
     }
 }

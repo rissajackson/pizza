@@ -5,7 +5,6 @@ use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -48,42 +47,10 @@ it('casts its attributes correctly', function () {
 it('supports soft deletes', function () {
     $pizzaOrder = PizzaOrder::factory()->create();
 
-    // Ensure the model exists
     expect(PizzaOrder::find($pizzaOrder->id))->not->toBeNull();
 
-    // Soft delete the model
     $pizzaOrder->delete();
 
-    // Assert the model is no longer findable, but still exists in the database
     expect(PizzaOrder::find($pizzaOrder->id))->toBeNull()
         ->and(PizzaOrder::withTrashed()->find($pizzaOrder->id))->not->toBeNull();
-});
-
-it('dispatches PizzaOrderStatusUpdatedEvent', function () {
-    Event::fake();
-
-    $pizzaOrder = PizzaOrder::factory()->create();
-
-    PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
-
-    Event::assertDispatched(PizzaOrderStatusUpdatedEvent::class, function ($event) use ($pizzaOrder) {
-        return $event->pizzaOrder->is($pizzaOrder);
-    });
-});
-
-it('does not dispatch PizzaOrderStatusUpdatedEvent if status is unchanged', function () {
-    // Fake the Event facade to intercept events
-    Event::fake();
-
-    $pizzaOrder = PizzaOrder::factory()->create([
-        'status' => PizzaOrderStatusEnum::RECEIVED,
-    ]);
-
-    // Perform an update, but do not change the 'status' property
-    $pizzaOrder->update([
-        'customer_name' => 'Jane Doe',
-    ]);
-
-    // Assert the PizzaOrderStatusUpdatedEvent was not dispatched
-    Event::assertNotDispatched(PizzaOrderStatusUpdatedEvent::class);
 });

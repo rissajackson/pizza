@@ -3,8 +3,10 @@
 namespace Tests\Feature\PhpunitPizzaOrderControllers;
 
 use App\Enums\PizzaOrderStatusEnum;
+use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
@@ -25,6 +27,8 @@ class PizzaOrderStatusControllerTest extends TestCase
 
     public function test_updates_status_successfully(): void
     {
+        Event::fake();
+
         $newStatus = PizzaOrderStatusEnum::IN_OVEN->value;
 
         $response = $this->patchJson(
@@ -47,10 +51,17 @@ class PizzaOrderStatusControllerTest extends TestCase
         $this->pizzaOrder->refresh();
         $this->assertNotNull($this->pizzaOrder->status_updated_at);
         $this->assertNotEquals($this->pizzaOrder->created_at, $this->pizzaOrder->status_updated_at);
+
+        Event::assertDispatched(PizzaOrderStatusUpdatedEvent::class, function ($event) use ($newStatus) {
+            return $event->pizzaOrder->id === $this->pizzaOrder->id &&
+                $event->pizzaOrder->status->value === $newStatus;
+        });
     }
 
     public function test_returns_200_when_status_is_the_same(): void
     {
+        Event::fake();
+
         $response = $this->patchJson(
             route('pizza-order-status.update', $this->pizzaOrder->id),
             ['status' => PizzaOrderStatusEnum::WORKING->value]
@@ -64,6 +75,8 @@ class PizzaOrderStatusControllerTest extends TestCase
             'id' => $this->pizzaOrder->id,
             'status' => PizzaOrderStatusEnum::WORKING->value,
         ]);
+
+        Event::assertNotDispatched(PizzaOrderStatusUpdatedEvent::class);
     }
 
     public function test_validates_invalid_status_value(): void
