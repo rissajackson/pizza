@@ -31,6 +31,8 @@ class PizzaOrder extends Model
         static::updated(function (self $pizzaOrder) {
             if ($pizzaOrder->wasChanged('status')) {
                 PizzaOrderStatusUpdatedEvent::dispatch($pizzaOrder);
+            } else {
+                logger()->info('Event NOT dispatched - no status change detected.');
             }
         });
     }

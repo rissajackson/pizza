@@ -57,7 +57,7 @@ class PizzaOrderStatusControllerTest extends TestCase
         );
 
         $response
-            ->assertOk()
+            ->assertStatus(422)
             ->assertJson(['message' => 'The status is already set to the requested value.']);
 
         $this->assertDatabaseHas('pizza_orders', [

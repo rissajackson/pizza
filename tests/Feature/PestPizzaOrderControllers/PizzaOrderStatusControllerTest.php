@@ -43,7 +43,7 @@ it('returns 200 if the status is already set', function () {
         'status' => PizzaOrderStatusEnum::WORKING->value,
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(422)
         ->assertJson(['message' => 'The status is already set to the requested value.']);
 
     $pizzaOrder->refresh();
