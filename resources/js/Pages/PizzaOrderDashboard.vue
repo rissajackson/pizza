@@ -17,13 +17,13 @@ const reactiveOrders = reactive(orders);
 const getStatusWithEmoji = computed(() => {
     return (status) => {
         switch (status) {
-            case 'Received':
+            case 'received':
                 return '📥 Received';
-            case 'Working':
+            case 'working':
                 return '⚒️ Working';
-            case 'In Oven':
+            case 'in_oven':
                 return '🔥 In Oven';
-            case 'Ready':
+            case 'ready':
                 return '✅ Ready';
             default:
                 return status;
@@ -102,10 +102,10 @@ onBeforeUnmount(() => {
                                                     order.id
                                                 }}</span> –
                                             <span :class="{
-                                            'italic text-red-500 font-bold font-mono': order.status === 'Received',
-                                            'italic text-blue-500 font-bold font-mono': order.status === 'Working',
-                                            'italic text-orange-500 font-bold font-mono': order.status === 'In Oven',
-                                            'italic text-green-500 font-bold font-mono': order.status === 'Ready'
+                                            'italic text-red-500 font-bold font-mono': order.status === 'received',
+                                            'italic text-blue-500 font-bold font-mono': order.status === 'working',
+                                            'italic text-orange-500 font-bold font-mono': order.status === 'in_oven',
+                                            'italic text-green-500 font-bold font-mono': order.status === 'ready'
                                             }">
                                                 {{ getStatusWithEmoji(order.status) }}
                                             </span>
@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
                                                 class="text-white font-bold py-2 px-4 rounded"
                                                 bgColorClass="bg-blue-400"
                                                 bgColorHoverClass="hover:bg-blue-600"
-                                                :disabled="order.status === 'Working'"
+                                                :disabled="order.status === 'working'"
                                             >
                                                 Start
                                             </PrimaryButton>
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
                                                 class="text-white font-bold py-2 px-4 rounded"
                                                 bgColorClass="bg-orange-400"
                                                 bgColorHoverClass="hover:bg-orange-600"
-                                                :disabled="order.status === 'In Oven'"
+                                                :disabled="order.status === 'in_oven'"
                                             >
                                                 Oven
                                             </PrimaryButton>
@@ -134,7 +134,7 @@ onBeforeUnmount(() => {
                                                 class="text-white font-bold py-2 px-4 rounded"
                                                 bgColorClass="bg-green-400"
                                                 bgColorHoverClass="hover:bg-green-600"
-                                                :disabled="order.status === 'Ready'"
+                                                :disabled="order.status === 'ready'"
                                             >
                                                 Ready
                                             </PrimaryButton>

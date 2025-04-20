@@ -1,16 +1,22 @@
 <?php
 
-use App\Models\PizzaOrder;
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\PizzaOrder;
+use Illuminate\Support\Facades\Log;
 
 Broadcast::channel('pizza-order.{orderId}', function ($user, $orderId) {
-    // Check if the order exists
-    $pizzaOrder = PizzaOrder::find($orderId);
-
-    if (! $pizzaOrder) {
-        return false; // Or, you could throw an exception:  throw new \Illuminate\Broadcasting\BroadcastException('Order not found.');
+    if (! ctype_digit((string) $orderId)) {
+        Log::warning("Invalid Order ID value provided: {$orderId}");
+        return false;
     }
 
-    // Check if the order belongs to the authenticated user
-    return $pizzaOrder->user_id === $user->id;
+    $authorized = PizzaOrder::where('id', $orderId)
+        ->where('user_id', $user->id ?? null)
+        ->exists();
+
+    if (! $authorized) {
+        Log::warning("User {$user->id} tried to access unauthorized Order ID {$orderId}.");
+    }
+
+    return $authorized;
 });
