@@ -6,6 +6,7 @@ use App\Enums\PizzaOrderStatusEnum;
 use App\Models\PizzaOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PizzaOrderStatusController extends Controller
 {
@@ -15,11 +16,7 @@ class PizzaOrderStatusController extends Controller
     public function update(Request $request, PizzaOrder $pizzaOrder): JsonResponse
     {
         $validated = $request->validate([
-            'status' => ['required', 'string', function (string $attribute, string $value, callable $fail) {
-                if (! in_array($value, PizzaOrderStatusEnum::values(), true)) {
-                    $fail("The selected {$attribute} is invalid.");
-                }
-            }],
+            'status' => ['required', 'string', Rule::in(PizzaOrderStatusEnum::values())],
         ]);
 
         if ($pizzaOrder->status->value === $validated['status']) {
