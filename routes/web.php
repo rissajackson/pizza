@@ -7,6 +7,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+require __DIR__ . '/auth.php';
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -17,24 +19,22 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('/dashboard', function() {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/pizza-orders', [PizzaOrderTrackingController::class, 'index'])
-        ->name('pizza-orders.index');
-});
+    Route::prefix('pizza-orders')->name('pizza-orders.')->group(function () {
+        Route::get('/', [PizzaOrderTrackingController::class, 'index'])->name('index');
 
-Route::middleware(['auth', 'throttle:update-status'])->group(function () {
-    Route::patch('pizza-orders/{pizzaOrder}/status', [PizzaOrderStatusController::class, 'update'])
-        ->name('pizza-order-status.update');
+        Route::middleware('throttle:update-status')->group(function () {
+            Route::patch('{pizzaOrder}/status', [PizzaOrderStatusController::class, 'update'])
+                ->name('status.update');
+        });
+    });
 });

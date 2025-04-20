@@ -25,7 +25,7 @@ function createPizzaOrderWithStatus(string $status = PizzaOrderStatusEnum::WORKI
 
 function updatePizzaOrderRoute(PizzaOrder|int $pizzaOrder, array $data = []): TestResponse
 {
-    return test()->patchJson(route('pizza-order-status.update', $pizzaOrder), $data);
+    return test()->patchJson(route('pizza-orders.status.update', $pizzaOrder), $data);
 }
 
 it('updates the status of an order successfully', function () {

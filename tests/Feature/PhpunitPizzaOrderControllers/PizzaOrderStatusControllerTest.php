@@ -35,7 +35,7 @@ class PizzaOrderStatusControllerTest extends TestCase
         $newStatus = PizzaOrderStatusEnum::IN_OVEN->value;
 
         $response = $this->patchJson(
-            route('pizza-order-status.update', $this->pizzaOrder->id),
+            route('pizza-orders.status.update', $this->pizzaOrder->id),
             ['status' => $newStatus]
         );
 
@@ -66,7 +66,7 @@ class PizzaOrderStatusControllerTest extends TestCase
         Event::fake();
 
         $response = $this->patchJson(
-            route('pizza-order-status.update', $this->pizzaOrder->id),
+            route('pizza-orders.status.update', $this->pizzaOrder->id),
             ['status' => PizzaOrderStatusEnum::WORKING->value]
         );
 
@@ -85,7 +85,7 @@ class PizzaOrderStatusControllerTest extends TestCase
     public function test_validates_invalid_status_value(): void
     {
         $response = $this->patchJson(
-            route('pizza-order-status.update', $this->pizzaOrder->id),
+            route('pizza-orders.status.update', $this->pizzaOrder->id),
             ['status' => 'invalid-status']
         );
 
@@ -102,7 +102,7 @@ class PizzaOrderStatusControllerTest extends TestCase
     public function test_returns_404_for_non_existent_order(): void
     {
         $response = $this->patchJson(
-            route('pizza-order-status.update', 99999),
+            route('pizza-orders.status.update', 99999),
             ['status' => PizzaOrderStatusEnum::READY->value]
         );
 
@@ -112,7 +112,7 @@ class PizzaOrderStatusControllerTest extends TestCase
     public function test_validates_missing_status_parameter(): void
     {
         $response = $this->patchJson(
-            route('pizza-order-status.update', $this->pizzaOrder->id),
+            route('pizza-orders.status.update', $this->pizzaOrder->id),
             []
         );
 
