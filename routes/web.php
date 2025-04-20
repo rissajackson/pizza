@@ -17,14 +17,13 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-
-Route::patch('pizza-orders/{pizzaOrder}/status', [PizzaOrderStatusController::class, 'update'])->name('pizza-order-status.update');
+require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
@@ -33,4 +32,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/pizza-orders', [PizzaOrderTrackingController::class, 'index'])
         ->name('pizza-orders.index');
+});
+
+Route::middleware(['auth', 'throttle:update-status'])->group(function () {
+    Route::patch('pizza-orders/{pizzaOrder}/status', [PizzaOrderStatusController::class, 'update'])
+        ->name('pizza-order-status.update');
 });

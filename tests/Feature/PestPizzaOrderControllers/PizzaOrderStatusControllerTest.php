@@ -3,8 +3,14 @@
 use App\Enums\PizzaOrderStatusEnum;
 use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
+use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
+
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->actingAs($this->user);
+});
 
 function createPizzaOrderWithStatus(string $status = PizzaOrderStatusEnum::WORKING->value): PizzaOrder
 {

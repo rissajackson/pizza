@@ -5,6 +5,7 @@ namespace Tests\Feature\PhpunitPizzaOrderControllers;
 use App\Enums\PizzaOrderStatusEnum;
 use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -22,6 +23,9 @@ class PizzaOrderStatusControllerTest extends TestCase
         $this->pizzaOrder = PizzaOrder::factory()->working()->create([
             'created_at' => now()->subMinutes(10),
         ]);
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
     }
 
     public function test_updates_status_successfully(): void
