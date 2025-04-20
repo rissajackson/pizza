@@ -1,7 +1,8 @@
 <script setup>
 import { reactive, onMounted, onBeforeUnmount, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
+import axios from 'axios';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const { orders } = defineProps({
@@ -41,9 +42,6 @@ onMounted(() => {
     });
 });
 
-/**
- * Subscribe to WebSocket updates for a specific order ID.
- */
 function subscribeToOrderUpdates(orderId) {
     window.Echo.channel(`pizza-order.${orderId}`)
         .listen('PizzaOrderStatusUpdatedEvent', (event) => {
@@ -56,29 +54,21 @@ function subscribeToOrderUpdates(orderId) {
         });
 }
 
-async function updateOrderStatus(orderId, newStatus) {
-    console.log('hey you clicked a button', orderId, newStatus);
-    const csrfToken = usePage().props.csrfToken;
+function updateOrderStatus(orderId, newStatus) {
+    axios
+        .patch(`/pizza-orders/${orderId}/status`, {status: newStatus})
+        .then((response) => {
+            console.log(`Order #${orderId} status updated to ${newStatus}`);
 
-    try {
-        const response = await fetch(`/pizza-orders/${orderId}/status`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-            },
-            body: JSON.stringify({ status: newStatus }),
+            const orderToUpdate = reactiveOrders.find((order) => order.id === orderId);
+            if (orderToUpdate) {
+                orderToUpdate.status = newStatus;
+            }
+        })
+        .catch((error) => {
+            console.error('Failed to update order status:', error.response?.data || error.message);
+            alert('Failed to update order status. Please try again.');
         });
-
-        if (!response.ok) {
-            throw new Error(`Failed to update order status: ${response.status}`);
-        }
-
-        console.log(`Order ${orderId} status updated to ${newStatus}`);
-     } catch (error) {
-        console.error('Error updating order status:', error);
-        alert('Failed to update order status. Please try again.');
-    }
 }
 
 onBeforeUnmount(() => {
@@ -89,7 +79,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Dashboard"/>
 
     <AuthenticatedLayout>
         <template #header>
@@ -108,7 +98,9 @@ onBeforeUnmount(() => {
                                 <li v-for="order in reactiveOrders" :key="order.id" class="mb-4">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <span class="font-semibold font-mono text-gray-800">Order #{{ order.id }}</span> –
+                                            <span class="font-semibold font-mono text-gray-800">Order #{{
+                                                    order.id
+                                                }}</span> –
                                             <span :class="{
                                             'italic text-red-500 font-bold font-mono': order.status === 'Received',
                                             'italic text-blue-500 font-bold font-mono': order.status === 'Working',
