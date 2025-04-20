@@ -18,6 +18,5 @@ class PizzaOrderSeeder extends Seeder
         PizzaOrder::factory()->inOven()->count(2)->create();
         PizzaOrder::factory()->ready()->count(1)->create();
 
-
     }
 }

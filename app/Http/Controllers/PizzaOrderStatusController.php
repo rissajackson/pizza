@@ -13,10 +13,6 @@ class PizzaOrderStatusController extends Controller
 {
     /**
      * Update the status of a pizza order.
-     *
-     * @param Request $request
-     * @param PizzaOrder $pizzaOrder
-     * @return JsonResponse
      */
     public function update(Request $request, PizzaOrder $pizzaOrder): JsonResponse
     {

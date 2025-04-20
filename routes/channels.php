@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Broadcast;
 use App\Models\PizzaOrder;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
 
 Broadcast::channel('pizza-order.{orderId}', function ($user, $orderId) {
     if (! ctype_digit((string) $orderId)) {
         Log::warning("Invalid Order ID value provided: {$orderId}");
+
         return false;
     }
 

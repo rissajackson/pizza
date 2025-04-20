@@ -25,6 +25,7 @@ class PizzaOrderFactory extends Factory
             'updated_at' => now(),
         ];
     }
+
     public function status(string $status): self
     {
         return $this->state(fn () => ['status' => $status, 'status_updated_at' => now()]);

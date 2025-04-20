@@ -1,14 +1,11 @@
 <?php
 
-
 namespace Tests\Unit\PhpunitPizzaOrder;
 
 use App\Enums\PizzaOrderStatusEnum;
-use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 

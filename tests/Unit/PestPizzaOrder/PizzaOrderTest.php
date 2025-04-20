@@ -1,14 +1,10 @@
 <?php
 
 use App\Enums\PizzaOrderStatusEnum;
-use App\Events\PizzaOrderStatusUpdatedEvent;
 use App\Models\PizzaOrder;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-
-// Test namespace is not needed for Pest
 
 uses(TestCase::class, RefreshDatabase::class);
 
