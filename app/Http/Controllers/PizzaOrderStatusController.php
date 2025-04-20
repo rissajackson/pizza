@@ -25,9 +25,10 @@ class PizzaOrderStatusController extends Controller
             ], 422);
         }
 
-        $pizzaOrder->status = $validated['status'];
-        $pizzaOrder->status_updated_at = now();
-        $pizzaOrder->save();
+        $pizzaOrder->update([
+            'status' => $validated['status'],
+            'status_updated_at' => now(),
+        ]);
 
         return response()->json([
             'message' => 'Status updated successfully!',
