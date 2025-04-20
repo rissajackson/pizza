@@ -12,6 +12,12 @@ class PizzaOrderSeeder extends Seeder
      */
     public function run(): void
     {
-        PizzaOrder::factory()->count(20)->create();
+        PizzaOrder::factory()->count(10)->create();
+        PizzaOrder::factory()->received()->count(4)->create();
+        PizzaOrder::factory()->working()->count(3)->create();
+        PizzaOrder::factory()->inOven()->count(2)->create();
+        PizzaOrder::factory()->ready()->count(1)->create();
+
+
     }
 }

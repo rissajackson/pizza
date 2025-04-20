@@ -11,7 +11,7 @@ it('renders the pizza order dashboard with orders and auth data', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $orders = PizzaOrder::factory()->count(3)->create();
+    $orders = PizzaOrder::factory()->count(3)->received()->create();
 
     $this->get(route('pizza-orders.index'))
         ->assertOk()

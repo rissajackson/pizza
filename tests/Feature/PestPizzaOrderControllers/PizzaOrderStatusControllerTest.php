@@ -8,7 +8,13 @@ use Illuminate\Testing\TestResponse;
 
 function createPizzaOrderWithStatus(string $status = PizzaOrderStatusEnum::WORKING->value): PizzaOrder
 {
-    return PizzaOrder::factory()->create(['status' => $status]);
+    return match ($status) {
+        PizzaOrderStatusEnum::RECEIVED->value => PizzaOrder::factory()->received()->create(),
+        PizzaOrderStatusEnum::WORKING->value => PizzaOrder::factory()->working()->create(),
+        PizzaOrderStatusEnum::IN_OVEN->value => PizzaOrder::factory()->inOven()->create(),
+        PizzaOrderStatusEnum::READY->value => PizzaOrder::factory()->ready()->create(),
+        default => PizzaOrder::factory()->create(['status' => $status]),
+    };
 }
 
 function updatePizzaOrderRoute(PizzaOrder|int $pizzaOrder, array $data = []): TestResponse
@@ -49,10 +55,10 @@ it('updates the status of an order successfully', function () {
 it('returns 200 if the status is already set', function () {
     Event::fake();
 
-    $pizzaOrder = createPizzaOrderWithStatus();
+    $pizzaOrder = createPizzaOrderWithStatus(PizzaOrderStatusEnum::READY->value);
 
     $response = updatePizzaOrderRoute($pizzaOrder, [
-        'status' => PizzaOrderStatusEnum::WORKING->value,
+        'status' => PizzaOrderStatusEnum::READY->value,
     ]);
 
     $response->assertStatus(422)
@@ -61,7 +67,7 @@ it('returns 200 if the status is already set', function () {
     $pizzaOrder->refresh();
 
     expect($pizzaOrder)
-        ->status->value->toBe(PizzaOrderStatusEnum::WORKING->value);
+        ->status->value->toBe(PizzaOrderStatusEnum::READY->value);
 
     Event::assertNotDispatched(PizzaOrderStatusUpdatedEvent::class);
 });

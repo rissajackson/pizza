@@ -19,8 +19,7 @@ class PizzaOrderStatusControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->pizzaOrder = PizzaOrder::factory()->create([
-            'status' => PizzaOrderStatusEnum::WORKING,
+        $this->pizzaOrder = PizzaOrder::factory()->working()->create([
             'created_at' => now()->subMinutes(10),
         ]);
     }
