@@ -11,9 +11,6 @@ use Illuminate\Validation\Rule;
 
 class PizzaOrderStatusController extends Controller
 {
-    /**
-     * Update the status of a pizza order.
-     */
     public function update(Request $request, PizzaOrder $pizzaOrder): JsonResponse
     {
         $validated = $request->validate([

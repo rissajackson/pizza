@@ -142,10 +142,10 @@ Follow these steps to run the project locally:
 - resources/js/Pages/PizzaOrderDashboard.vue
 - resources/js/bootstrap.js
 - routes/web.php
-- tests/Feature/PestPizzaOrderControllers
-- tests/Feature/PhpunitPizzaOrderControllers
-- tests/Unit/PestPizzaOrder
-- tests/Unit/PhpunitPizzaOrder
+- tests/Feature/PestPizzaOrderControllerTest.php
+- tests/Feature/PhpunitPizzaOrderControllerTest.php
+- tests/Unit/PestPizzaOrderTest.php
+- tests/Unit/PhpunitPizzaOrderTest.php
 
 
 ## About Laravel
