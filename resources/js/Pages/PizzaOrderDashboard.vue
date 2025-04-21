@@ -55,8 +55,14 @@ function subscribeToOrderUpdates(orderId) {
 }
 
 function updateOrderStatus(orderId, newStatus) {
+    const csrfToken = window.csrfToken;
     axios
-        .patch(`/pizza-orders/${orderId}/status`, {status: newStatus})
+        .patch(`/pizza-orders/${orderId}/status`, {status: newStatus},
+            {
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                }
+            })
         .then((response) => {
             console.log(`Order #${orderId} status updated to ${newStatus}`);
 
