@@ -51,6 +51,9 @@ function subscribeToOrderUpdates(orderId) {
             if (orderToUpdate) {
                 orderToUpdate.status = event.status;
             }
+        })
+        .error((error) => {
+            console.error(`Error subscribing to channel for Order #${orderId}:`, error);
         });
 }
 
